@@ -10,7 +10,7 @@ module.exports = async ({ipfsUrl, ethUrl}) => {
   const ipfs = require("nano-ipfs-store").at(ipfsUrl);
   const bs58 = require("bs58");
   const cidToBytes32 = cid => "0x" + bs58.decode(cid).toString("hex").slice(8);
-  const bytes32ToCid = bytes32 => bs58.encode(Buffer.from("82c1fded"  +bytes32.slice(2), "hex"));
+  const bytes32ToCid = bytes32 => bs58.encode(Buffer.from("82c1fdec"  +bytes32.slice(2), "hex"));
 
   // Used for RPC, signatures and UTF-8 encodings
   const Eth = require("eth-lib");
