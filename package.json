@@ -1,7 +1,8 @@
 {
-  "name": "json-to-ipfs",
+  "name": "ethereum-publisher",
   "version": "0.1.0",
-  "description": "",
+  "description": "Publishes files to ethereum contracts",
+  "repository": "https://github.com/alexvandesande/ethereum-publisher-dapp.git",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

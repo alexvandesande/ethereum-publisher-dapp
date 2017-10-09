@@ -10,7 +10,7 @@ module.exports = async ({ipfsUrl, ethUrl}) => {
   const ipfs = require("nano-ipfs-store").at(ipfsUrl);
   const bs58 = require("bs58");
   const cidToBytes32 = cid => "0x" + bs58.decode(cid).toString("hex").slice(8);
-  const bytes32ToCid = bytes32 => bs58.encode(Buffer.from("82c1fdec"  +bytes32.slice(2), "hex"));
+  const bytes32ToCid = bytes32 => bs58.encode(Buffer.from(bytes32, "hex"));
 
   // Used for RPC, signatures and UTF-8 encodings
   const Eth = require("eth-lib");
@@ -48,18 +48,26 @@ module.exports = async ({ipfsUrl, ethUrl}) => {
     store.forEach(([key, val]) => {
       console.log("- " + key + " (" + Eth.bytes.padRight(32, Eth.bytes.fromString(key)) + "): " + val);
     });
-    
+    console.log("-------");
+    console.log("!  ", Eth.bytes.fromString(store[1][0]), store[1][1]);
+    console.log("-------");
+
     const account = Eth.account.fromPrivate(privateKey);
     const nonce = await rpc("eth_getTransactionCount", [account.address, "latest"]);
 
+    // v1: 0x874968a344dfC4F52Dde9F6f47b97F71529a95A1
+//      data: methodCallData("publishOne(string,string)", [Eth.bytes.fromString("food"), Eth.bytes.fromString("bard")]),
+
+    // v2: 0xBcd7614A03f1d7b78B8e1848A9006A580906c6c8
+    // v3: 0x159a61F54eA1898e8935877ffE25AFC821fa213B
     const tx = {
       from: account.address,
-      to: "0x874968a344dfC4F52Dde9F6f47b97F71529a95A1",
+      to: "0x159a61F54eA1898e8935877ffE25AFC821fa213B",
       chainId: "0x4",
       value: "0x0",
       gasPrice: Eth.nat.fromString("20000000000"), // 20gwei
       gas: Eth.nat.fromString("200000"), // 200k gas
-      data: methodCallData("publish(bytes32[],bytes32[])", [store.map(([k,v])=>Eth.bytes.fromString(k)), store.map(([k,v])=>v)]),
+      data: methodCallData("publishOne(bytes,bytes)", [Eth.bytes.fromString(store[1][0]), store[1][1]]),
       nonce: nonce
     };
     console.log("Ethereum transaction (json):");
@@ -74,7 +82,7 @@ module.exports = async ({ipfsUrl, ethUrl}) => {
 
   return {
     publish: publish,
-    bytes32ToCid, 
+    bytes32ToCid,
     cidToBytes32
   }
 

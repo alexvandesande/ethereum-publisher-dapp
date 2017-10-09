@@ -2,6 +2,9 @@
 const Publisher = require(".");
 const Eth = require("eth-lib");
 const ipfs = require("nano-ipfs-store").at("https://ipfs.infura.io:5001");
+const Moon = require("moon-lang")("https://ipfs.infura.io:5001");
+const keccak256 = Moon.parse(await Moon.imports("zb2rhkcDyioJbNcAMUAD4rBxi1pp5g5qFzAkGvQiKPu6MJcVu"));
+const seed = require("fs").readFileSync("./privateKey", "utf8");
 
 const publisher = await Publisher({
     ipfsUrl: "https://ipfs.infura.io:5001",
@@ -9,11 +12,13 @@ const publisher = await Publisher({
 });
 
 console.log(Eth)
-console.log(Eth.account.fromPrivate("0x0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"))
-console.log(Eth.bytes.toString("0x6b656363616b3235360000000000000000000000000000000000000000000000"))
-console.log(Eth.bytes.toString("0x98e3a02c91748b456dd53ae9d3d9d2bc4507696c469bd64e57e39206a856e3d1"))
-console.log(Eth.bytes.toString("0x6970667343696400000000000000000000000000000000000000000000000000"))
-console.log(publisher.bytes32ToCid("0xe16a3da6f08837db32fe4971b969163a34a33c566de8852dc73c616499066a12"))
-console.log(await ipfs.cat("zb2ri2bhsWjpHiUYeXeAwnS7GS2SbUViBQgwy6qDpHj7EZdE1"));
+console.log("-------");
+console.log(Eth.bytes.toString("0x69706673436964"))
+console.log(Eth.bytes.toString("0xb77e4b12d5adaa023de8d41b12b8315c65dd98515619d0cf03cf73649580f130"))
+console.log(publisher.bytes32ToCid("0xb77e4b12d5adaa023de8d41b12b8315c65dd98515619d0cf03cf73649580f130"))
+console.log("-------");
+
+// console.log(await ipfs.cat("zb2ri2bhsWjpHiUYeXeAwnS7GS2SbUViBQgwy6qDpHj7EZdE1"))
+console.log("Some private key from seed", Eth.account.fromPrivate(keccak256(seed)))
 
 })()
